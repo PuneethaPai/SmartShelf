@@ -8,13 +8,13 @@ class TrainSetGeneartor(object):
         self._video = cv2.VideoCapture(video_path)
         self._rackReferenceSet = []
         self.__croping = False
-        self.windowHeight = windowHeight
-        self.windowWidth = windowWidth
+        self._windowHeight = windowHeight
+        self._windowWidth = windowWidth
         self.__firstFrame = self._get_first_frame()
 
     def _get_first_frame(self):
         success, frame = self._video.read()
-        return cv2.resize(frame, (self.windowWidth, self.windowHeight), interpolation=cv2.INTER_AREA)
+        return cv2.resize(frame, (self._windowWidth, self._windowHeight), interpolation=cv2.INTER_AREA)
 
     def _mouse_handler(self, event, x, y, flags, params):
         global refPt
@@ -63,7 +63,7 @@ class TrainSetGeneartor(object):
             success, frame = self._video.read()
             if not success:
                 break
-            frame = cv2.resize(frame, (self.windowWidth, self.windowHeight), interpolation=cv2.INTER_AREA)
+            frame = cv2.resize(frame, (self._windowWidth, self._windowHeight), interpolation=cv2.INTER_AREA)
             croppendFrameSet = self._get_frame_set(frame)
             self._write_to_disk(croppendFrameSet, count)
             self._show_images(croppendFrameSet)

@@ -2,37 +2,6 @@ import cv2
 import itertools
 import numpy as np
 
-fgbg = cv2.createBackgroundSubtractorMOG2()
-
-class RemovePeople(object):
-    def __init__(self, video_path, result_size):
-        self.cap = cv2.VideoCapture(video_path)
-        self.result_size = result_size
-        self.background = self.read_frame()
-        self.background_subtractor = cv2.createBackgroundSubtractorMOG2()
-
-    def read_frame(self):
-        ret, frame = self.cap.read()
-        if not ret:
-            raise Exception("Read Frame Failed!!")
-        frame = cv2.resize(frame, self.result_size, interpolation=cv2.INTER_AREA)
-        return frame
-
-    def run(self):
-        while 1:
-            frame = self.read_frame()
-            masked_frame = apply_mask(frame)
-            self.background = just_background(frame, self.background)
-            cv2.imshow('Video', frame)
-            cv2.imshow('Mask', masked_frame)
-            cv2.imshow('Result', self.background)
-            if cv2.waitKey(1) & 0xFF == ord('q'):
-                break
-            self.cap.release()
-            cv2.destroyAllWindows()
-
-
-
 cols = 400
 
 rows = 400
@@ -73,28 +42,26 @@ def just_background(frame, current_background):
 
 
 mob = "/Users/puneethp/Downloads/Shelf Focusing Videos/Testing/test_2.3gp"
-remove_people = RemovePeople(mob, (64, 32))
-cv2.imshow("Background", remove_people.background)
+cap = cv2.VideoCapture(mob)
+print cap.get(5)
+cap.set(5, 200)
 
-remove_people.run()
-# cap = cv2.VideoCapture(mob)
-# print cap.get(5)
-#
-# ret, background = cap.read()
-# background = cv2.resize(background, (rows, cols), interpolation=cv2.INTER_AREA)
-#
-# while 1:
-#     ret, frame = cap.read()
-#     if not ret:
-#         break
-#     frame = cv2.resize(frame, (rows, cols), interpolation=cv2.INTER_AREA)
-#     masked_frame = apply_mask(frame)
-#     background = just_background(frame, background)
-#     cv2.imshow('Video', frame)
-#     cv2.imshow('Mask', masked_frame)
-#     cv2.imshow('Result', background)
-#     if cv2.waitKey(1) & 0xFF == ord('q'):
-#         break
-#
-# cap.release()
-# cv2.destroyAllWindows()
+fgbg = cv2.createBackgroundSubtractorMOG2()
+ret, background = cap.read()
+background = cv2.resize(background, (rows, cols), interpolation=cv2.INTER_AREA)
+
+while 1:
+    ret, frame = cap.read()
+    if not ret:
+        break
+    frame = cv2.resize(frame, (rows, cols), interpolation=cv2.INTER_AREA)
+    masked_frame = apply_mask(frame)
+    background = just_background(frame, background)
+    cv2.imshow('Video', frame)
+    cv2.imshow('Mask', masked_frame)
+    cv2.imshow('Result', background)
+    if cv2.waitKey(1) & 0xFF == ord('q'):
+        break
+
+cap.release()
+cv2.destroyAllWindows()

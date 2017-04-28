@@ -1,3 +1,5 @@
+import cPickle
+
 import cv2
 
 refPt = []
@@ -70,12 +72,22 @@ class TrainSetGeneartor(object):
             count += 1
 
     def process_extract(self):
-        self._generate_dataset_for_a_rack(rackName="rack 1")
-        self._generate_dataset_for_a_rack(rackName="rack 2")
-        self._generate_dataset_for_a_rack(rackName="rack 3")
+        self._rackReferenceSet=self.load_points()
+        # self._generate_dataset_for_a_rack(rackName="rack 1")
+        # self._generate_dataset_for_a_rack(rackName="rack 2")
+        # self._generate_dataset_for_a_rack(rackName="rack 3")
+        # self.save_points()
 
     def process_save(self):
         self._crop_and_save()
+
+    def load_points(self):
+        with open("saved_cordinates.pkl", "rb") as sr:
+            return cPickle.load(sr)
+
+    def save_points(self):
+        with open("saved_cordinates.pkl", "wb") as sv:
+            cPickle.dump(self._rackReferenceSet, sv)
 
 # tt = TrainSetGeneartor("../video.mp4", 350, 512)
 # tt.process_extract()

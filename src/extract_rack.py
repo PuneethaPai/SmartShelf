@@ -67,16 +67,16 @@ class TrainSetGeneartor(object):
                 break
             frame = cv2.resize(frame, (self._windowWidth, self._windowHeight), interpolation=cv2.INTER_AREA)
             croppendFrameSet = self._get_frame_set(frame)
-            self._write_to_disk(croppendFrameSet, count)
+            # self._write_to_disk(croppendFrameSet, count)
             self._show_images(croppendFrameSet)
             count += 1
 
     def process_extract(self):
-        self._rackReferenceSet=self.load_points()
-        # self._generate_dataset_for_a_rack(rackName="rack 1")
-        # self._generate_dataset_for_a_rack(rackName="rack 2")
-        # self._generate_dataset_for_a_rack(rackName="rack 3")
-        # self.save_points()
+        # self._rackReferenceSet=self.load_points()
+        self._generate_dataset_for_a_rack(rackName="rack 1")
+        self._generate_dataset_for_a_rack(rackName="rack 2")
+        self._generate_dataset_for_a_rack(rackName="rack 3")
+        self.save_points()
 
     def process_save(self):
         self._crop_and_save()
